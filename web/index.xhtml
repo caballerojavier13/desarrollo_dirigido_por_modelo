@@ -55,11 +55,11 @@
                             <h:outputText value="#{persona.edad}" />
                         </p:column>
                         <p:column headerText="Operaciones">
-                            <p:commandButton value="Editar" type="button" actionListener="#{ABMPersona.mostrarEdicion}" onclick="PF('newPersona').show();" style="color:blue; margin-right: 10px">
+                            <p:commandButton value="Editar" type="button" actionListener="#{ABMPersona.mostrarEdicion}" onclick="PF('editPersona').show();" style="color:blue; margin-right: 10px">
 
                             </p:commandButton>
 
-                            <p:commandButton value="Eliminar" type="button" actionListener="#{ABMPersona.eliminar}" onclick="PF('newPersona').show();" style="color:blue; ">
+                            <p:commandButton value="Eliminar" type="button" actionListener="#{ABMPersona.eliminar}"  style="color:blue; ">
 
                             </p:commandButton>
                         </p:column>
@@ -68,10 +68,10 @@
             </div>
             <p:dialog header="Crear Persona" widgetVar="newPersona" modal="true" width="40%">
 
-                <h:form id="grid">
+                <h:form id="newGrid">
                     <p:ajaxStatus oncomplete="nuevaPersona()" />
 
-                    <p:messages id="msgs" />
+                    <p:messages id="new_msgs" />
 
                     <ul style="width: 80%; margin-left: 10%; list-style: none;">
                         <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
@@ -89,10 +89,42 @@
                     </ul>
                     <ul style="width: 100%; list-style: none; position: relative">
                         <li style="display: flex; width: 50%; position: relative">
-                            <p:commandButton value="Cancelar" process="@form" update="grid" actionListener="#{ABMPersona.cancelar}" type="button" onclick="limpiarErrores()" style="position: relative; margin: 0 auto;"/> 
+                            <p:commandButton value="Cancelar" process="@form" update="newGrid" actionListener="#{ABMPersona.cancelar}" type="button" onclick="limpiarErroresNew()" style="position: relative; margin: 0 auto;"/> 
                         </li>
                         <li style="display: flex;width: 50%; position: absolute; top: 0; left: 50%;">
-                            <p:commandButton value="Guardar" process="@form" update="grid" actionListener="#{ABMPersona.guardar}" onclick="limpiarErrores()" style="position: relative; margin: 0 auto;"/>
+                            <p:commandButton value="Guardar" process="@form" update="newGrid" actionListener="#{ABMPersona.guardar}" onclick="limpiarErroresNew()" style="position: relative; margin: 0 auto;"/>
+                        </li>
+                    </ul>
+                </h:form>
+
+            </p:dialog>   
+            <p:dialog header="Editar Persona" widgetVar="editPersona" modal="true" width="40%">
+
+                <h:form id="editGrid">
+                    <p:ajaxStatus oncomplete="editarPersona()" />
+
+                    <p:messages id="edit_msgs" />
+
+                    <ul style="width: 80%; margin-left: 10%; list-style: none;">
+                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
+                            <h:outputLabel for="new_nombre" value="Nombre: " style="width: 20%"/>
+                            <p:inputText id="new_nombre" style="width: 80%" value="#{ABMPersona.nombre}" required="true" requiredMessage="El campo nombre es requerido."/>
+                        </li>
+                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
+                            <h:outputLabel for="new_apellido" value="Apellido: " style="width: 20%"/>
+                            <p:inputText id="new_apellido"  style="width: 80%" value="#{ABMPersona.apellido}" required="true" requiredMessage="El campo apellido es requerido."/>
+                        </li>
+                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
+                            <h:outputLabel for="new_edad" value="Edad: "  style="width: 20%"/>
+                            <p:spinner id="new_edad" stepFactor="1" min="0"  value="#{ABMPersona.edad}" required="true" requiredMessage="El campo edad es requerido."/>
+                        </li>
+                    </ul>
+                    <ul style="width: 100%; list-style: none; position: relative">
+                        <li style="display: flex; width: 50%; position: relative">
+                            <p:commandButton value="Cancelar" process="@form" update="editGrid" actionListener="#{ABMPersona.cancelar}" type="button" onclick="limpiarErroresEdit()" style="position: relative; margin: 0 auto;"/> 
+                        </li>
+                        <li style="display: flex;width: 50%; position: absolute; top: 0; left: 50%;">
+                            <p:commandButton value="Guardar" process="@form" update="editGrid" actionListener="#{ABMPersona.guardar}" onclick="limpiarErroresEdit()" style="position: relative; margin: 0 auto;"/>
                         </li>
                     </ul>
                 </h:form>
@@ -101,23 +133,40 @@
         </div>
         <script>
             function nuevaPersona() {
-                var cantidadErrores = $("#grid .ui-messages div ul li").size();
+                var cantidadErrores = $("#newGrid .ui-messages div ul li").size();
                 if (1 > parseInt(cantidadErrores)) {
-                    resetFormularioNuevo();
+                    resetFormularioNew();
                 }
             }
-            function limpiarErrores() {
-                $("#grid .ui-messages ").empty();
-                resetFormularioNuevo();
+            function editarPersona() {
+                var cantidadErrores = $("#newGrid .ui-messages div ul li").size();
+                if (1 > parseInt(cantidadErrores)) {
+                    resetFormularioEdit();
+                }
             }
-
-            function resetFormularioNuevo() {
-                $("#grid_new_nombre").val("");
-                $("#grid_new_nombre").removeClass("ui-state-error");
-                $("#grid_new_apellido").val("");
-                $("#grid_new_apellido").removeClass("ui-state-error");
-                $("#grid_new_edad").val("0");
+            function limpiarErroresNew() {
+                $("#newGrid .ui-messages ").empty();
+                resetFormularioNew();
+            }
+            function limpiarErroresEdit() {
+                $("#newGrid .ui-messages ").empty();
+                resetFormularioEdit();
+            }
+            function resetFormularioNew() {
+                $("#newGrid_new_nombre").val("");
+                $("#newGrid_new_nombre").removeClass("ui-state-error");
+                $("#newGrid_new_apellido").val("");
+                $("#newGrid_new_apellido").removeClass("ui-state-error");
+                $("#newGrid_new_edad").val("0");
                 PF('newPersona').hide();
+            }
+            function resetFormularioEdit() {
+                $("#editGrid_new_nombre").val("");
+                $("#editGrid_new_nombre").removeClass("ui-state-error");
+                $("#editGrid_new_apellido").val("");
+                $("#editGrid_new_apellido").removeClass("ui-state-error");
+                $("#editGrid_new_edad").val("0");
+                PF('editPersona').hide();
             }
         </script>    
     </h:body>
