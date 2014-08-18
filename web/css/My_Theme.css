@@ -1,0 +1,68 @@
+body{
+    background-image: url('../img/background.png');
+    background-repeat: repeat;
+}
+button span{
+    box-shadow: 0 0 10px black;
+
+    border:  solid;
+}
+#listadopersona_tabla{
+    border-radius: 5px;
+    box-shadow: 0 0 10px black;
+}
+.ui-inputfield {
+    padding: 0;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#listadopersona_personaDetail table tr{
+    border: white;
+}
+#create_personaNueva table tr{
+    border: white;
+}
+#create_j_idt13_input{
+    height: 27px;
+    padding-left: 8px;
+    line-height: 30px;
+    border: solid 1px rgb(167, 167, 167);
+    box-shadow: none;
+}
+#listadopersona_j_idt38_input{
+    height: 27px;
+    padding-left: 8px;
+    line-height: 30px;
+    border: solid 1px rgb(167, 167, 167);
+    box-shadow: none;
+}
+.ui-dialog .ui-dialog-titlebar{
+    position: relative;
+    padding: 0 0 8px 0;
+    margin: 20px 20px 5px 20px;
+    border: solid #e5e5e5;
+    border-width: 0 0 1px 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background: rgba(50,50,50,0.4)  !important;
+}
+.ui-dialog .ui-dialog-titlebar span{
+    color: white;
+    margin-left: 20px;
+}
+.ui-widget-header{
+    background:  #f6f7f9 !important;
+}
+
+.ui-paginator-bottom{
+    border: 1px solid #1584de !important;   
+}
+
+
+#listadopersona_tabla_head tr th{
+    border: 1px solid #1584de !important;   
+}
+#listadopersona_tabla_data tr td{
+    border: 1px solid #1584de !important;   
+}

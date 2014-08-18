@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Expertos;
 
+import IntermediarioBD.IntermediarioPersona;
 import Modelo.Persona;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 
 /**
  *
@@ -26,14 +26,17 @@ public class PersonaService {
     public PersonaService() {
     }
 
-    public List<Persona> createPersonas(int size) {
-        List<Persona> list = new ArrayList();
-        for(int i = 0 ; i < size ; i++) {
-            Persona p = new Persona(i);
-            list.add(p);
-        }
-         
-        return list;
+    public List<Persona> listarPersonas() {
+        return new IntermediarioPersona().ListarPersonas();
+    }
+    
+    public void eliminarPersona(int id){
+        new IntermediarioPersona().Eliminar(new IntermediarioPersona().Buscar(id));
+    }
+    
+    public boolean guardar(Persona p){
+        boolean Guardar = new IntermediarioPersona().Guardar(p);
+        return Guardar;
     }
     
 }

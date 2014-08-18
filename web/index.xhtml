@@ -2,174 +2,127 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>Modulo Persona</title>
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" 
+      lang="es">
+      <h:head>
+        <title>Modulo ABM Persona</title>
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/bootstrap.css" />
         <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/bootstrap-theme.css" />
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/My_Theme.css" />
+        <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/img/favicon.png" />
+        <script>
+            window.myfaces = window.myfaces || {};
+            myfaces.config = myfaces.config || {};
+            //set the config part
+            myfaces.config.no_portlet_env = true;
+
+        </script>
+
         <script type="text/javascript" href="#{request.contextPath}/js/jquery.js" />
         <script type="text/javascript" href="#{request.contextPath}/js/bootstrap.js" />
-        <style>
-            body{
-                background-image: url('#{request.contextPath}/img/background.png');
-                background-repeat: repeat;
-            }
-        </style>
+        
     </h:head>
-    <h:body>
+    <h:body style="min-width: 600px">
 
-        <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-
-                    <a class="navbar-brand active">Desarrollo Dirigido por Modelos</a>
-                </div>
-
-            </div><!-- /.container-fluid -->
+        <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" style="min-width: 600px" role="navigation" >
+            <p class="navbar-text" style="width: 100%; text-align: center; color: white; font-size: 30px;">Desarrollo de Software Dirigido por Modelos</p>
         </nav>
-        <div id="body">
-            <div style="width: 90%; margin-left: 5%;" id="tabla">
+        <h:form id="create" style="margin-top: 100px;"  >
+            <p:commandButton value="Nueva Persona" update="personaNueva" actionListener="#{HomeView.prepareCreatePersona()}" style="margin-bottom: 20px; left: 5%" onclick="PF('newpersona').show();" />
+            <p:dialog header="Crear Persona" widgetVar="newpersona" id="newpersona" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400" >
+                <p:outputPanel id="personaNueva" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="true" style="width: 100%; ">
 
-                <h:form style="margin-bottom: 20px">
-                    <p:commandButton value="Nueva Persona" type="button" onclick="PF('newPersona').show();" />
-                </h:form>
-                <h:form>
-                    <p:dataTable id="tabla"  var="persona" value="#{HomeView.personas}" rows="10"
-                                 paginator="true"
-                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,15">
-                        <p:column headerText="Id">
-                            <h:outputText value="#{persona.id}" />
-                        </p:column>
+                        <h:outputText value="Nombre" style="color: black;"/>
+                        <h:inputText value="#{HomeView.nombre}" style="padding-left: 10px; padding-right: 15px;" required="true" requiredMessage="El campo nombre es obligatorio"/>
 
-                        <p:column headerText="Apellido">
-                            <h:outputText value="#{persona.apellido}" />
-                        </p:column>
+                        <h:outputText value="Apellido:" style="color: black;"/>
+                        <h:inputText value="#{HomeView.apellido}" style="padding-left: 10px; padding-right: 15px;" required="true" requiredMessage="El campo apellido es obligatorio"/>
 
-                        <p:column headerText="Nombre" >
-                            <h:outputText value="#{persona.nombre}" />
-                        </p:column>
+                        <h:outputText value="Edad:" style="color: black;"/>
+                        <p:spinner  value="#{HomeView.edad}" style="padding-left: 15px; padding-right: 15px; left: -6px; height: 27px;" min="0" max="100"/>
+                    </p:panelGrid>
+                    <br/>
+                    <p:panelGrid  columns="2" style="width: 100%">
+                        <p:commandButton value="Cancelar" actionListener="#{HomeView.cancelNewPersona()}" onclick="PF('newpersona').hide();" style="margin-bottom: 20px"/>
 
-                        <p:column headerText="Edad">
-                            <h:outputText value="#{persona.edad}" />
-                        </p:column>
-                        <p:column headerText="Operaciones">
-                            <p:commandButton value="Editar" type="button" actionListener="#{ABMPersona.mostrarEdicion}" onclick="PF('editPersona').show();" style="color:blue; margin-right: 10px">
+                        <p:commandButton value="Guardar" onclick="PF('newpersona').hide();" actionListener="#{HomeView.saveNewPersona()}" style="margin-bottom: 20px"/>
+                    </p:panelGrid>
 
-                            </p:commandButton>
+                </p:outputPanel>
+            </p:dialog> 
+        </h:form>
+        <h:form  style="width: 90%; margin-left: 5%; margin-bottom: 70px" id="listadopersona">
 
-                            <p:commandButton value="Eliminar" type="button" actionListener="#{ABMPersona.eliminar}"  style="color:blue; ">
+            <p:contextMenu for="tabla">
+                <p:menuitem value="Editar" update="personaDetail" icon="ui-icon-search" oncomplete="PF('persona').show()"/>
+                <p:menuitem value="Delete" update="tabla" icon="ui-icon-close" actionListener="#{HomeView.deletePersona()}"/>
+            </p:contextMenu>
+            <p:dataTable id="tabla"  var="persona" value="#{HomeView.personas}" rows="10"
+                         widgetVar="personaTabla"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15,20"
+                         emptyMessage="No se encontro ninguna persona"
+                         filteredValue="#{HomeView.filtroPersona}"
 
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                </h:form>
-            </div>
-            
-            <p:dialog header="Crear Persona" widgetVar="newPersona" modal="true" width="40%">
+                         rowKey="#{persona.id}"
+                         selection="#{HomeView.selectedPersona}" selectionMode="single"
+                         >
 
-                <h:form id="newGrid">
-                    <p:ajaxStatus oncomplete="nuevaPersona()" />
+                <p:column headerText="Id"  sortBy="#{persona.id}" filterBy="#{persona.id}" filterMatchMode="exact">
+                    <h:outputText value="#{persona.id}" />
+                </p:column>
 
-                    <p:messages id="new_msgs" />
+                <p:column headerText="Apellido" sortBy="#{persona.apellido}" filterBy="#{persona.apellido}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.apellido}" />
+                </p:column>
 
-                    <ul style="width: 80%; margin-left: 10%; list-style: none;">
-                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
-                            <h:outputLabel for="new_nombre" value="Nombre: " style="width: 20%"/>
-                            <p:inputText id="new_nombre" style="width: 80%" value="#{ABMPersona.nombre}" required="true" requiredMessage="El campo nombre es requerido."/>
-                        </li>
-                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
-                            <h:outputLabel for="new_apellido" value="Apellido: " style="width: 20%"/>
-                            <p:inputText id="new_apellido"  style="width: 80%" value="#{ABMPersona.apellido}" required="true" requiredMessage="El campo apellido es requerido."/>
-                        </li>
-                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
-                            <h:outputLabel for="new_edad" value="Edad: "  style="width: 20%"/>
-                            <p:spinner id="new_edad" stepFactor="1" min="0"  value="#{ABMPersona.edad}" required="true" requiredMessage="El campo edad es requerido."/>
-                        </li>
-                    </ul>
-                    <ul style="width: 100%; list-style: none; position: relative">
-                        <li style="display: flex; width: 50%; position: relative">
-                            <p:commandButton value="Cancelar" process="@form" update="newGrid" actionListener="#{ABMPersona.cancelar}" type="button" onclick="limpiarErroresNew()" style="position: relative; margin: 0 auto;"/> 
-                        </li>
-                        <li style="display: flex;width: 50%; position: absolute; top: 0; left: 50%;">
-                            <p:commandButton value="Guardar" process="@form" update="newGrid" actionListener="#{ABMPersona.guardar}" onclick="limpiarErroresNew()" style="position: relative; margin: 0 auto;"/>
-                        </li>
-                    </ul>
-                </h:form>
+                <p:column headerText="Nombre" sortBy="#{persona.nombre}" filterBy="#{persona.nombre}" filterMatchMode="contains">
+                    <h:outputText value="#{persona.nombre}" />
+                </p:column>
 
-            </p:dialog>   
-            <p:dialog header="Editar Persona" widgetVar="editPersona" modal="true" width="40%">
+                <p:column headerText="Edad" sortBy="#{persona.edad}" filterBy="#{persona.edad}" filterMatchMode="exact">
+                    <h:outputText value="#{persona.edad}" />
+                </p:column>
+                <f:facet name="footer">
+                    En total hay #{HomeView.personas.size()} personas.
+                </f:facet>
+            </p:dataTable>
 
-                <h:form id="editGrid">
-                    <p:ajaxStatus oncomplete="editarPersona()" />
+            <p:dialog header="Editar Persona" widgetVar="persona" id="persona" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="400" >
+                <p:outputPanel id="personaDetail" style="text-align:center;">
+                    <p:panelGrid  columns="2" rendered="#{not empty HomeView.selectedPersona}" style="width: 100%; ">
 
-                    <p:messages id="edit_msgs" />
+                        <h:outputText value="Nombre" style="color: black;"/>
+                        <h:outputText value="#{HomeView.selectedPersona.id}" style="padding-left: 15px; padding-right: 15px;"/>
 
-                    <ul style="width: 80%; margin-left: 10%; list-style: none;">
-                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
-                            <h:outputLabel for="new_nombre" value="Nombre: " style="width: 20%"/>
-                            <p:inputText id="new_nombre" style="width: 80%" value="#{ABMPersona.nombre}" required="true" requiredMessage="El campo nombre es requerido."/>
-                        </li>
-                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
-                            <h:outputLabel for="new_apellido" value="Apellido: " style="width: 20%"/>
-                            <p:inputText id="new_apellido"  style="width: 80%" value="#{ABMPersona.apellido}" required="true" requiredMessage="El campo apellido es requerido."/>
-                        </li>
-                        <li style="width: 100%; margin-bottom: 20px; margin-top: 20px;"> 
-                            <h:outputLabel for="new_edad" value="Edad: "  style="width: 20%"/>
-                            <p:spinner id="new_edad" stepFactor="1" min="0"  value="#{ABMPersona.edad}" required="true" requiredMessage="El campo edad es requerido."/>
-                        </li>
-                    </ul>
-                    <ul style="width: 100%; list-style: none; position: relative">
-                        <li style="display: flex; width: 50%; position: relative">
-                            <p:commandButton value="Cancelar" process="@form" update="editGrid" actionListener="#{ABMPersona.cancelar}" type="button" onclick="limpiarErroresEdit()" style="position: relative; margin: 0 auto;"/> 
-                        </li>
-                        <li style="display: flex;width: 50%; position: absolute; top: 0; left: 50%;">
-                            <p:commandButton value="Guardar" process="@form" update="editGrid" actionListener="#{ABMPersona.guardar}" onclick="limpiarErroresEdit()" style="position: relative; margin: 0 auto;"/>
-                        </li>
-                    </ul>
-                </h:form>
+                        <h:outputText value="Nombre" style="color: black;"/>
+                        <h:inputText value="#{HomeView.selectedPersona.nombre}" style="padding-left: 15px; padding-right: 15px;" required="true" requiredMessage="El campo nombre es obligatorio"/>
 
-            </p:dialog>   
-        </div>
-        <script>
-            function nuevaPersona() {
-                var cantidadErrores = $("#newGrid .ui-messages div ul li").size();
-                if (1 > parseInt(cantidadErrores)) {
-                    resetFormularioNew();
-                }
-            }
-            function editarPersona() {
-                var cantidadErrores = $("#newGrid .ui-messages div ul li").size();
-                if (1 > parseInt(cantidadErrores)) {
-                    resetFormularioEdit();
-                }
-            }
-            function limpiarErroresNew() {
-                $("#newGrid .ui-messages ").empty();
-                resetFormularioNew();
-            }
-            function limpiarErroresEdit() {
-                $("#newGrid .ui-messages ").empty();
-                resetFormularioEdit();
-            }
-            function resetFormularioNew() {
-                $("#newGrid_new_nombre").val("");
-                $("#newGrid_new_nombre").removeClass("ui-state-error");
-                $("#newGrid_new_apellido").val("");
-                $("#newGrid_new_apellido").removeClass("ui-state-error");
-                $("#newGrid_new_edad").val("0");
-                PF('newPersona').hide();
-            }
-            function resetFormularioEdit() {
-                $("#editGrid_new_nombre").val("");
-                $("#editGrid_new_nombre").removeClass("ui-state-error");
-                $("#editGrid_new_apellido").val("");
-                $("#editGrid_new_apellido").removeClass("ui-state-error");
-                $("#editGrid_new_edad").val("0");
-                PF('editPersona').hide();
-            }
-        </script>    
+                        <h:outputText value="Apellido:" style="color: black;"/>
+                        <h:inputText value="#{HomeView.selectedPersona.apellido}" style="padding-left: 15px; padding-right: 15px;" required="true" requiredMessage="El apellido nombre es obligatorio"/>
+
+                        <h:outputText value="Edad:" style="color: black;"/>
+                        <p:spinner  value="#{HomeView.selectedPersona.edad}" style="padding-left: 15px; padding-right: 15px; left: -6px; height: 27px;" min="0" max="100"/>
+                    </p:panelGrid>
+                    <br/>
+                    <p:panelGrid  columns="2" style="width: 100%">
+                        <p:commandButton value="Cancelar" actionListener="#{HomeView.cancelPersona()}" onclick="PF('persona').hide();" style="margin-bottom: 20px"/>
+
+                        <p:commandButton value="Guardar" update="tabla" onclick="PF('persona').hide();" actionListener="#{HomeView.savePersona()}" style="margin-bottom: 20px"/>
+                    </p:panelGrid>
+
+                </p:outputPanel>
+
+            </p:dialog> 
+
+
+        </h:form>
+        <nav class="navbar navbar-default navbar-inverse navbar-fixed-bottom" role="navigation">
+            <p class="navbar-text" style="width: 100%; text-align: center">Por Javier Hernan Caballero Garcia</p>
+        </nav>
     </h:body>
 </html>
 

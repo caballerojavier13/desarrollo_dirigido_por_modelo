@@ -5,7 +5,8 @@
         <group>
             <file>file:/home/javier/NetBeansProjects/Proyecto%20DdSDM/web/index.xhtml</file>
             <file>file:/home/javier/NetBeansProjects/Proyecto%20DdSDM/src/java/Controlador/ControladorJSF_Home.java</file>
-            <file>file:/home/javier/NetBeansProjects/Proyecto%20DdSDM/src/java/Controlador/ControladorJSF_Persona_ABM.java</file>
+            <file>file:/home/javier/NetBeansProjects/Proyecto%20DdSDM/web/WEB-INF/web.xml</file>
+            <file>file:/home/javier/NetBeansProjects/Proyecto%20DdSDM/src/java/Modelo/Persona.java</file>
             <file>file:/home/javier/NetBeansProjects/Proyecto%20DdSDM/src/java/Expertos/PersonaService.java</file>
         </group>
     </open-files>

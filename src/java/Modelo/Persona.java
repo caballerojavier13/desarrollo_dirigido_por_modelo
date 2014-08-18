@@ -20,7 +20,7 @@ public class Persona implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String Nombre;
 
@@ -29,21 +29,25 @@ public class Persona implements Serializable {
     private int Edad;
 
     public Persona() {
-
+        id = -1;
+        Nombre = "";
+        Apellido = "";
+        Edad = 0;
     }
 
-    public Persona(int i) {
-        id = new Long(i);
-        Nombre = "Javier"+ ( 20 - i);
-        Apellido = "Caballero" + i;
-        Edad = 22 - i;
+    public Persona(String Nombre, String Apellido, int Edad) {
+        id = -1;
+        this.Nombre = Nombre;
+        this.Apellido = Apellido;
+        this.Edad = Edad;
     }
 
-    public Long getId() {
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -101,29 +105,5 @@ public class Persona implements Serializable {
         this.Edad = Edad;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Persona)) {
-            return false;
-        }
-        Persona other = (Persona) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Modelo.Persona[ id=" + id + " ]";
-    }
 
 }
