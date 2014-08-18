@@ -44,7 +44,7 @@ public class IntermediarioPersona extends Intermediario {
                 }
 
             } catch (Exception e) {
-
+                e.printStackTrace();
                 conn.rollback();
 
             } finally {

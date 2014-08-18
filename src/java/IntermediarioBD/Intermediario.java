@@ -14,6 +14,6 @@ import java.sql.Connection;
  */
 public abstract class Intermediario {
     protected Connection ConectarBaseDatos() throws Exception{
-        return ConexionMySQL.conectar("localhost", "root", "root", "tutorial");
+        return ConexionMySQL.conectar("www.db4free.net:3306", "caballerojavier", "36416999", "ejemploddsdm");
     }
 }
